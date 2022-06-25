@@ -2,10 +2,8 @@ export const DOTS = "...";
 
 function usePagination({ currentPage, totalCount, pageSize }) {
   /*
-    Rewrite the logic here to map out the pagination to be displayed
-
-    !!!!!! ATTENTION !!!!!!
-    Please replace this comment here with a description of this hook.
+    This hook takes in total number of blogs and divides number of blogs per page chosen by the user or default set at 15 to get total number of pages.
+    and returns an array according to the current page selected.
     
   */
   const lastPage = Number(Math.ceil(totalCount / pageSize));

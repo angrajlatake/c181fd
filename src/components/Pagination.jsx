@@ -1,5 +1,5 @@
 import "../css/pagination.scss";
-
+import { useMemo } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
 import usePagination, { DOTS } from "../hooks/usePagination";
 
@@ -15,11 +15,15 @@ function Pagination({
   pageSize,
   pageSizeOptions,
 }) {
-  const paginationRange = usePagination({
-    currentPage,
-    totalCount,
-    pageSize,
-  });
+  const paginationRange = useMemo(
+    () =>
+      usePagination({
+        currentPage,
+        totalCount,
+        pageSize,
+      }),
+    [currentPage, totalCount, pageSize]
+  );
 
   const onNext = () => {
     onPageChange(currentPage + 1);
@@ -42,7 +46,7 @@ function Pagination({
           // Do not remove the aria-label below, it is used for Hatchways automation.
           aria-label="Goto previous page"
           onClick={onPrevious}
-          disabled={currentPage === 1 ? true : false} // change this line to disable a button.
+          disabled={currentPage === 1} // change this line to disable a button.
         >
           <ChevronLeftIcon />
         </button>
@@ -63,7 +67,7 @@ function Pagination({
           <li
             key={key}
             className="paginationItem"
-            aria-current={currentPage === pageNumber ? "page" : "false"} // change this line to highlight a current page.
+            aria-current={currentPage === pageNumber && "page"} // change this line to highlight a current page.
           >
             <button
               type="button"
@@ -84,11 +88,7 @@ function Pagination({
           // Do not remove the aria-label below, it is used for Hatchways automation.
           aria-label="Goto next page"
           onClick={onNext}
-          disabled={
-            currentPage === paginationRange[paginationRange.length - 1]
-              ? true
-              : false
-          } // change this line to disable a button.
+          disabled={currentPage === paginationRange.pop()} // change this line to disable a button.
         >
           <ChevronRightIcon />
         </button>

@@ -1,6 +1,6 @@
 import BlogPost from "./BlogPost";
 import Pagination from "./Pagination";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import blogs from "../data/blogs.json";
 
 const PAGE_SIZES = [15, 25, 50, 100];
@@ -8,9 +8,11 @@ const PAGE_SIZES = [15, 25, 50, 100];
 function BlogList() {
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [currentPage, setCurrentPage] = useState(1);
-  const firstBlog = (currentPage - 1) * pageSize;
-  const lastBlog = currentPage * pageSize;
-  const currentPaginationData = blogs.posts.slice(firstBlog, lastBlog);
+  const currentPageData = useMemo(() => {
+    const firstBlog = (currentPage - 1) * pageSize;
+    const lastBlog = currentPage * pageSize;
+    return blogs.posts.slice(firstBlog, lastBlog);
+  }, [currentPage, pageSize]);
 
   const updateRowsPerPage = (blogsPerPage) => {
     setPageSize(Number(blogsPerPage));
@@ -34,7 +36,7 @@ function BlogList() {
         // Do not remove the aria-label below, it is used for Hatchways automation.
         aria-label="blog list"
       >
-        {currentPaginationData.map((blog) => (
+        {currentPageData.map((blog) => (
           <BlogPost
             key={blog.id}
             author={blog.author}
